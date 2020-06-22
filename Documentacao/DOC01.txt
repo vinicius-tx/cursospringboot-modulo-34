@@ -27,5 +27,13 @@ Controller é como se fosse uma servlet.
 @EnableTransactionManagement
 	:Habilitar a parte de transações do Spring.
 
+Thymeleaf:
+	Igual ao jsp, mas é um framework mais enxuto ainda.
+	
+th:each=" variavel : expression language"
+	:Itera sobre uma determinada lista.
+	
+th:text=" expression language{variavel.atributo}"
+	:Apresenta na tela o valor do atributo de um objeto.
 	
 	
