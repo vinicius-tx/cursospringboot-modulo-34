@@ -8,4 +8,8 @@ Controller é como se fosse uma servlet.
 @EntityScan(basePackages = "com.example.demo.model")
 	: Spring boot lê e identifica entidades pra criar  as tabelas.
 	
+@ComponentScan(basePackages = {"com.*"})
+	:Faz o spring mapear os pacotes.
+	:Lendo as anotações e configurando em memória para nossa aplicação funcionar.
+	
 	
