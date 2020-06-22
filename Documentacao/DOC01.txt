@@ -1,0 +1,3 @@
+Controller é como se fosse uma servlet.
+
+@Controller -> Vai ser um controller de MVC, vai interceptar requisições de uma url.
