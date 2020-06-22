@@ -11,15 +11,18 @@
 <body>
 	<h2>Cadastro Pessoa</h2>
 
-	<form action="salvarpessoa" method="post">
+	<form action="salvarpessoa" method="post" th:object="${pessoaobj}">
+		<label>ID</label>
+		<input name="id" th:field="*{id}" readonly="readonly">
+	
 		<label>Nome</label> 
-		<input type="text" name="nome"/> 
+		<input type="text" name="nome" th:field="*{nome}"/> 
 		
 		<label>Sobrenome</label> 
-		<input type="text" name="sobrenome" /> 
+		<input type="text" name="sobrenome" th:field="*{sobrenome}"/> 
 		
 		<label>Idade</label> 
-		<input	type="text" name="idade" /> 
+		<input	type="text" name="idade" th:field="*{idade}"/> 
 		
 		<input type="submit" value="salvar">
 	</form>

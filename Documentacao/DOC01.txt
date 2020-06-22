@@ -45,6 +45,12 @@ th:text=" expression language{variavel.atributo}"
 a th:href="@{/URI/{DefinicaoDaVariavel}(DefinicaoDaVariavel = ${objeto.atributo})}
 	:Serve para passar alguma coisa através da URL de um objeto.
 
+th:object="${objeto}"
+	:Carrega um objeto para o formulário
+	
+th:field="*{atributo}"
+	:Carrega um campo para o id apontando * para um atributo.
+
 ModelAndView
 	:Vai ligar os dados que eu tenho no meu modelo(Banco de dados) com a minha view(tela).
 	
