@@ -27,7 +27,16 @@
 		<input type="submit" value="salvar">
 	</form>
 	
+	
+	<form action="pesquisapessoa" method="post">
+		<label>Pesquisa por nome</label>
+		<input type="text" name="nomepesquisa">
+		<input type="submit" value="buscar">
+	</form>
+	
+	
 	<a href="/listapessoas">Listar Pessoas</a>
+	
 	
 	<table>
 		<tr th:each="pessoa : ${pessoas}">

@@ -32,6 +32,13 @@ Controller é como se fosse uma servlet.
 	
 @GetMapping("/editarpessoa/{idpessoa}")
 	: Alternativa ao RequestMaping. Entre {} vem os parâmetros.
+	
+@Query("select p from Pessoa p where p.nome like %?1%")
+	: Serve para fazer consultas JPQL.
+
+@RequestParam("nomepesquisa") 
+	: Serve para pegar parâmetros no corpo da requisição. Usa-se quando enviar dados através de post.
+	: Percebe que o variavel for enviada pelo formulário e não uma url toda estranha.
 
 Thymeleaf:
 	Igual ao jsp, mas é um framework mais enxuto ainda.
