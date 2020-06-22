@@ -35,5 +35,14 @@ th:each=" variavel : expression language"
 	
 th:text=" expression language{variavel.atributo}"
 	:Apresenta na tela o valor do atributo de um objeto.
+
+ModelAndView
+	:Vai ligar os dados que eu tenho no meu modelo(Banco de dados) com a minha view(tela).
+	
+new ModelAndView(nomeDaTelaDeRetorno)
+	:Objeto criado com a sua respectiva view.
+	
+ModelandView.addObject(nomeDoAtributo, objeto)
+	:Adiciona no atributo da expression language, que aparece na tela o objeto passado.
 	
 	
