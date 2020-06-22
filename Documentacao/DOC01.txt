@@ -61,4 +61,5 @@ ModelandView.addObject(nomeDoAtributo, objeto)
 	:Adiciona no atributo da expression language, que aparece na tela o objeto passado.
 	
 	
-
+* 
+	: Asterisco antes do caminho é bom pra quando as urls estiverem bagunçadas.

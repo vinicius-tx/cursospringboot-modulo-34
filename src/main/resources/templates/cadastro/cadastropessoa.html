@@ -11,9 +11,9 @@
 <body>
 	<h2>Cadastro Pessoa</h2>
 
-	<form action="salvarpessoa" method="post" th:object="${pessoaobj}">
+	<form action="salvarpessoa" th:object="${pessoaobj}" method="post">
 		<label>ID</label>
-		<input name="id" th:field="*{id}" readonly="readonly">
+		<input type="text" name="id" th:field="*{id}" readonly="readonly">
 	
 		<label>Nome</label> 
 		<input type="text" name="nome" th:field="*{nome}"/> 
@@ -34,7 +34,7 @@
 			<td th:text=" ${pessoa.id}"/>
 			<td th:text=" ${pessoa.nome}"/>
 			<td th:text=" ${pessoa.sobrenome}"/>
-			<td><a th:href="@{/editarpessoa/{idpessoa}(idpessoa = ${pessoa.id})}"></a></td>
+			<td><a th:href="@{/editarpessoa/{idpessoa}(idpessoa = ${pessoa.id})}">Editar</a></td>
 		</tr>
 	</table>
 
