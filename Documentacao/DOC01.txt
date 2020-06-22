@@ -1,3 +1,4 @@
 Controller é como se fosse uma servlet.
 
 @Controller -> Vai ser um controller de MVC, vai interceptar requisições de uma url.
+@EntityScan(basePackages = "com.example.demo.model") -> Spring boot ler e identificar que existem tabelas para serem criadas.
