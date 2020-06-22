@@ -12,4 +12,20 @@ Controller é como se fosse uma servlet.
 	:Faz o spring mapear os pacotes.
 	:Lendo as anotações e configurando em memória para nossa aplicação funcionar.
 	
+@Repository
+	: Pra indicar pro Spring que se trata de uma interface que vai realizar operações com o banco de dados
+
+@Transactional
+	:Pro spring controlar toda a parte de transações.
+	
+@Autowired
+	:Faz a injeção de dependência.
+	
+@EnableJpaRepositories(basePackages = {"com.example.demo.repository"})
+	:Faz o spring identificar os nossos repositories.
+	
+@EnableTransactionManagement
+	:Habilitar a parte de transações do Spring.
+
+	
 	
