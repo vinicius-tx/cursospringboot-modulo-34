@@ -18,11 +18,25 @@ public class Pessoa implements Serializable {
 	private String nome;
 	
 	private String sobrenome;
+	
+	private Integer idade;
 
 	public Pessoa() {
 		// TODO Auto-generated constructor stub
 	}
 	
+	public Integer getIdade() {
+		return idade;
+	}
+
+
+
+	public void setIdade(Integer idade) {
+		this.idade = idade;
+	}
+
+
+
 	public Long getId() {
 		return id;
 	}
