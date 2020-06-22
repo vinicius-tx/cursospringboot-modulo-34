@@ -26,6 +26,12 @@ Controller é como se fosse uma servlet.
 	
 @EnableTransactionManagement
 	:Habilitar a parte de transações do Spring.
+	
+@PathVariable("idpessoa")
+	:Pega uma variavel que foi passada pela url
+	
+@GetMapping("/editarpessoa/{idpessoa}")
+	: Alternativa ao RequestMaping. Entre {} vem os parâmetros.
 
 Thymeleaf:
 	Igual ao jsp, mas é um framework mais enxuto ainda.
