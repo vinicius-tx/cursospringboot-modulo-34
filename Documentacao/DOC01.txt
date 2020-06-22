@@ -36,6 +36,9 @@ th:each=" variavel : expression language"
 th:text=" expression language{variavel.atributo}"
 	:Apresenta na tela o valor do atributo de um objeto.
 
+a th:href="@{/URI/{DefinicaoDaVariavel}(DefinicaoDaVariavel = ${objeto.atributo})}
+	:Serve para passar alguma coisa através da URL de um objeto.
+
 ModelAndView
 	:Vai ligar os dados que eu tenho no meu modelo(Banco de dados) com a minha view(tela).
 	
@@ -46,3 +49,4 @@ ModelandView.addObject(nomeDoAtributo, objeto)
 	:Adiciona no atributo da expression language, que aparece na tela o objeto passado.
 	
 	
+
