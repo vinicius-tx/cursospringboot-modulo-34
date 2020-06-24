@@ -32,4 +32,18 @@
 		
 		<input type="submit" value="Adicionar">
 	</form>
+	
+	<table>
+		<tr>
+			<th>Id</th>
+			<th>Numero</th>
+			<th>Tipo</th>
+		</tr>
+		<tr th:each="fone : ${telefones}">
+			<td th:text="${fone.id}"/>
+			<td th:text="${fone.numero}"/>
+			<td th:text="${fone.tipo}"/>
+		</tr>
+	</table>
+	
 </html>

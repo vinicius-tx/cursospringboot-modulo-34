@@ -85,6 +85,7 @@ public class PessoaController {
 		ModelAndView modelAndView = new ModelAndView(telaTelefones);
 		Pessoa pessoa = pessoaRepository.findById(idpessoa).get();
 		modelAndView.addObject("pessoaobj", pessoa);
+		modelAndView.addObject("telefones", telefoneRepository.getTelefones(idpessoa));
 		return modelAndView;
 	}
 	
@@ -96,6 +97,7 @@ public class PessoaController {
 		telefone.setPessoa(pessoa);
 		telefoneRepository.save(telefone);
 		modelAndView.addObject("pessoaobj", pessoa);
+		modelAndView.addObject("telefones", telefoneRepository.getTelefones(pessoaId));
 		return modelAndView;
 	}
 	

@@ -16,7 +16,7 @@ public class Telefone implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long Telefone;
+	private Long id;
 	
 	@Column(columnDefinition = "varchar(20)")
 	private String numero;
@@ -31,13 +31,13 @@ public class Telefone implements Serializable {
 	public Telefone() {
 
 	}
-
-	public Long getTelefone() {
-		return Telefone;
+ 
+	public Long getId() {
+		return id;
 	}
 
-	public void setTelefone(Long telefone) {
-		Telefone = telefone;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getNumero() {
