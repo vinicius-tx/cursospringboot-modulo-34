@@ -52,6 +52,11 @@ th:text=" expression language{variavel.atributo}"
 
 a th:href="@{/URI/{DefinicaoDaVariavel}(DefinicaoDaVariavel = ${objeto.atributo})}
 	:Serve para passar alguma coisa através da URL de um objeto.
+	:Estrutura que ajuda a gravar
+		:@{//{}()}
+		
+th:action = "@{//{}()}"
+	:Serve para montar a url passando um parâmetro no caminho da url.
 
 th:object="${objeto}"
 	:Carrega um objeto para o formulário

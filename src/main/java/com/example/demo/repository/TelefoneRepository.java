@@ -10,5 +10,4 @@ import com.example.demo.model.Telefone;
 @Transactional
 public interface TelefoneRepository extends CrudRepository<Telefone, Long>{
 
-	
 }

@@ -20,5 +20,16 @@
 		<p>Idade: <span th:text="${p.idade}"></span></p>
 	</div>
 
-</body>
+	<h5>Telefones</h5>
+	<form th:action="@{/addfonepessoa/{pessoaid}(pessoaid = ${pessoaobj.id})}" method="post">		
+	
+		<label for="numero">Numero</label>
+		<input type="text" name="numero"><br/>
+		
+		<label for="tipo">Tipo</label>
+		<input type="text" name="tipo"><br/>
+		
+		
+		<input type="submit" value="Adicionar">
+	</form>
 </html>

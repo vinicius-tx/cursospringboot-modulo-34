@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.model.Pessoa;
+import com.example.demo.model.Telefone;
 import com.example.demo.repository.PessoaRepository;
+import com.example.demo.repository.TelefoneRepository;
 
 @Controller
 public class PessoaController {
@@ -21,6 +23,9 @@ public class PessoaController {
 	
 	@Autowired
 	private PessoaRepository pessoaRepository;
+	
+	@Autowired
+	private TelefoneRepository telefoneRepository;
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/cadastropessoa")
 	public ModelAndView inicio() {
@@ -79,6 +84,17 @@ public class PessoaController {
 	public ModelAndView telefones(@PathVariable("idpessoa") Long idpessoa) {
 		ModelAndView modelAndView = new ModelAndView(telaTelefones);
 		Pessoa pessoa = pessoaRepository.findById(idpessoa).get();
+		modelAndView.addObject("pessoaobj", pessoa);
+		return modelAndView;
+	}
+	
+	@PostMapping("**/addfonepessoa/{pessoaid}")
+	public ModelAndView addFonePessoa(Telefone telefone, 
+			@PathVariable("pessoaid") Long pessoaId) {
+		ModelAndView modelAndView = new ModelAndView(telaTelefones);
+		Pessoa pessoa = pessoaRepository.findById(pessoaId).get();
+		telefone.setPessoa(pessoa);
+		telefoneRepository.save(telefone);
 		modelAndView.addObject("pessoaobj", pessoa);
 		return modelAndView;
 	}
