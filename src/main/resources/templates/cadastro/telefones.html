@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+	
+<head>
+
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+
+<body>	
+	<h2>Controle De Telefones</h2>
+	
+	<a href="/cadastropessoa">Cadastro De Pessoa</a>
+	
+	<div th:each="p : ${pessoaobj}">
+		<p>ID: <span th:text="${p.id}"></span></p>
+		<p>Nome: <span th:text="${p.nome}"></span></p>
+		<p>Sobrenome: <span th:text="${p.sobrenome}"></span></p>
+		<p>Idade: <span th:text="${p.idade}"></span></p>
+	</div>
+
+</body>
+</html>

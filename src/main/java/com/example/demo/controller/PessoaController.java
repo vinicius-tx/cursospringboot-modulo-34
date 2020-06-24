@@ -17,6 +17,7 @@ import com.example.demo.repository.PessoaRepository;
 public class PessoaController {
 
 	private final String retorno = "cadastro/cadastropessoa";
+	private final String telaTelefones = "cadastro/telefones";
 	
 	@Autowired
 	private PessoaRepository pessoaRepository;
@@ -71,6 +72,14 @@ public class PessoaController {
 		ModelAndView modelAndView = new ModelAndView(retorno);
 		modelAndView.addObject("pessoas", pessoaRepository.findPessoaByName(nomepesquisa));
 		modelAndView.addObject("pessoaobj", new Pessoa());
+		return modelAndView;
+	}
+	
+	@GetMapping("**/telefones/{idpessoa}")
+	public ModelAndView telefones(@PathVariable("idpessoa") Long idpessoa) {
+		ModelAndView modelAndView = new ModelAndView(telaTelefones);
+		Pessoa pessoa = pessoaRepository.findById(idpessoa).get();
+		modelAndView.addObject("pessoaobj", pessoa);
 		return modelAndView;
 	}
 	

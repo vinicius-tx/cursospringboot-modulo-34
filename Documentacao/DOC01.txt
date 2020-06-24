@@ -45,6 +45,7 @@ Thymeleaf:
 	
 th:each=" variavel : expression language"
 	:Itera sobre uma determinada lista.
+	:Pode ser usado se for um único objeto. Talvez, porque o método sempre retorna um Iterable.
 	
 th:text=" expression language{variavel.atributo}"
 	:Apresenta na tela o valor do atributo de um objeto.
