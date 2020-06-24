@@ -25,6 +25,7 @@ public class PessoaController {
 	public ModelAndView inicio() {
 		ModelAndView andView =  new ModelAndView(retorno);
 		andView.addObject("pessoaobj", new Pessoa());
+		andView.addObject("pessoas", pessoaRepository.findAll());
 		return andView;
 	}
 	
