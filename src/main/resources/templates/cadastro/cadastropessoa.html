@@ -10,6 +10,10 @@
 
 <body>
 	<h2>Cadastro Pessoa</h2>
+	
+	<div th:each="m : ${msg}">
+		<span th:text="${m}"></span>
+	</div>
 
 	<form action="salvarpessoa" th:object="${pessoaobj}" method="post">
 		<label>ID</label>

@@ -76,6 +76,22 @@ new ModelAndView(nomeDaTelaDeRetorno)
 ModelandView.addObject(nomeDoAtributo, objeto)
 	:Adiciona no atributo da expression language, que aparece na tela o objeto passado.
 	
-	
+@NotNull(message = MENSAGEM)
+	:Não aceita valores nulos
+	:message
+		:Define um mensagem de validação.
+
+@Valid
+	: Serve para informar que aquele objeto irá ser validado.
+
+BindingResult binding
+	:Um objeto que é muito útil para retornar as mensagens de validação
+	:binding.getAllErrors()
+		:Retorna uma lista do erros com muitas informações sobre nos atrbutos dos objetos.
+
+ObjectError object 
+	:object.getDefaultMessage()
+		:Mensagens que definimos no message de uma validação.
+
 * 
 	: Asterisco antes do caminho é bom pra quando as urls estiverem bagunçadas.

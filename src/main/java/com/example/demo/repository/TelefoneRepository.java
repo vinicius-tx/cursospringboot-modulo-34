@@ -17,6 +17,9 @@ public interface TelefoneRepository extends CrudRepository<Telefone, Long>{
 	@Query("select t from Telefone t where t.pessoa.id = ?1")
 	List<Telefone> getTelefones(Long pessoaId);
 	
+	@Query("select t.pessoa.id from Telefone t where t.id = ?1")
+	Long getPessoaId(Long idTelefone);
+	
 	@Modifying
 	@Query("delete Telefone t where t.pessoa.id = ?1")
 	void deletarRegistroTelefonePorPessoa(Long id);
