@@ -65,6 +65,7 @@ public class PessoaController {
 	
 	@GetMapping("removerpessoa/{idpessoa}")
 	public ModelAndView excluir(@PathVariable("idpessoa") Long idpessoa) {
+		telefoneRepository.deletarRegistroTelefonePorPessoa(idpessoa);
 		pessoaRepository.deleteById(idpessoa);
 		ModelAndView modelAndView = new ModelAndView(retorno);
 		modelAndView.addObject("pessoas", pessoaRepository.findAll());

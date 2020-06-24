@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -25,8 +26,8 @@ public class Pessoa implements Serializable {
 	
 	private Integer idade;
 	
-	@OneToMany(mappedBy = "pessoa", orphanRemoval = true, cascade = CascadeType.ALL)
-	private List<Telefone> telefones;
+	@OneToMany(mappedBy = "pessoa")
+	private List<Telefone> telefones = null;
 
 	public Pessoa() {
 		// TODO Auto-generated constructor stub

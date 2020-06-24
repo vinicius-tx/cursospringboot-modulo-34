@@ -27,6 +27,9 @@ Controller é como se fosse uma servlet.
 @EnableTransactionManagement
 	:Habilitar a parte de transações do Spring.
 	
+@Modifying
+	:Serve para habilitar comandos DML.	
+
 @PathVariable("idpessoa")
 	:Pega uma variavel que foi passada pela url
 	
