@@ -38,12 +38,16 @@
 			<th>Id</th>
 			<th>Numero</th>
 			<th>Tipo</th>
+			<th>Deletar Telefones</th>
 		</tr>
+		
 		<tr th:each="fone : ${telefones}">
 			<td th:text="${fone.id}"/>
 			<td th:text="${fone.numero}"/>
 			<td th:text="${fone.tipo}"/>
+			<td><a th:href="@{/removertelefone/{idtelefone}(idtelefone = ${fone.id})}"><span>Excluir</span></a></td>
 		</tr>
+		
 	</table>
 	
 </html>
