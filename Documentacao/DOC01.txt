@@ -138,7 +138,9 @@ classe de serviço
 		
 		
 		
-		
+GrantedAuthority
+	:Usar os recursos do spring e facilitar a nossa implementação.
+	:É um padrão onde sempre vai ter que ter ROLE_ALGUMACOISA nessa tabela do banco de dados.		
 		
 		
 		
