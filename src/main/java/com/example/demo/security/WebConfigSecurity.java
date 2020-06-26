@@ -1,5 +1,6 @@
 package com.example.demo.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -14,8 +15,10 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @EnableWebSecurity
 public class WebConfigSecurity extends WebSecurityConfigurerAdapter {
 	
+	@Autowired
+	private ImplementacaoUserDetailsService service;
+	
 	private final String IGNORE = "C:/workspace-spring-tool-suite-4-4.6.0.RELEASE/cursospringboot34/src/main/resources/static";
-	private final String senhaCriptografada = "$2a$10$DS23E4VycGysX.sPz7eiyentwDGJh5uKGiByAzwmw5uRESrfat2Ge";
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -30,10 +33,10 @@ public class WebConfigSecurity extends WebSecurityConfigurerAdapter {
 	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		auth.inMemoryAuthentication().passwordEncoder(new BCryptPasswordEncoder())
-			.withUser("vinicius")
-			.password(senhaCriptografada)
-			.roles("ADMIN");
+		
+		auth.userDetailsService(service)
+			.passwordEncoder(new BCryptPasswordEncoder());
+		
 	}
 	
 	@Override

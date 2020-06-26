@@ -127,4 +127,23 @@ and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
 	
 configure(AuthenticationManagerBuilder auth)
 	:Configura autenticação do usuário com o banco de dados ou em memória
+	
+UserDetails 
+	:Interface que ajuda na validação com o Spring security
 
+classe de serviço
+	:Precisa dela para implementar outra interface ( UserDetailService) para podermos passar 
+		como parâmetro dentro do WebConfigSecurity. 
+			:Para fazer uso do uso do controle de autenticação do banco de dados no spring security.
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
