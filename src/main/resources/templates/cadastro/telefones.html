@@ -19,6 +19,11 @@
 		<p>Sobrenome: <span th:text="${p.sobrenome}"></span></p>
 		<p>Idade: <span th:text="${p.idade}"></span></p>
 	</div>
+	
+	<div th:each="m : ${msg}">
+		<span th:text="${m}"></span>
+	</div>
+	
 
 	<h5>Telefones</h5>
 	<form th:action="@{/addfonepessoa/{pessoaid}(pessoaid = ${pessoaobj.id})}" method="post">		

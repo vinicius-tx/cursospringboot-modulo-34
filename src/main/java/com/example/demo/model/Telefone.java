@@ -1,6 +1,8 @@
 package com.example.demo.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,10 +30,16 @@ public class Telefone implements Serializable {
 	@JoinColumn(name = "pessoa_id")
 	private Pessoa pessoa;
 	
+	@javax.persistence.Transient
+	private boolean valido;
+	
+	@javax.persistence.Transient
+	private List<String> errorMessageUser = new ArrayList<>();
+	
 	public Telefone() {
 
 	}
- 
+	
 	public Long getId() {
 		return id;
 	}
@@ -62,5 +70,29 @@ public class Telefone implements Serializable {
 
 	public void setPessoa(Pessoa pessoa) {
 		this.pessoa = pessoa;
+	}
+
+	public boolean isValido() {
+		if (this.getNumero().isEmpty() || this.getNumero() == null) {
+			errorMessageUser.add("Numero deve ser informado");
+		}
+		
+		if (this.getTipo() == null || this.getTipo().isEmpty()) { 
+			errorMessageUser.add("O tipo deve ser informado");
+		}
+		
+		return (errorMessageUser.isEmpty()); 
+	}
+
+	public void setValido(boolean valido) {
+		this.valido = valido;
+	}
+
+	public List<String> getErrorMessageUser() {
+		return errorMessageUser;
+	}
+
+	public void setErrorMessageUser(List<String> errorMessageUser) {
+		this.errorMessageUser = errorMessageUser;
 	}
 }

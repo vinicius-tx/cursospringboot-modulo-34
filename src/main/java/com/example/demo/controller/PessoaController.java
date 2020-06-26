@@ -2,9 +2,7 @@ package com.example.demo.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-
 import com.example.demo.model.Pessoa;
 import com.example.demo.model.Telefone;
 import com.example.demo.repository.PessoaRepository;
@@ -88,6 +85,11 @@ public class PessoaController {
 	@PostMapping("**/addfonepessoa/{pessoaid}")
 	public ModelAndView addFonePessoa(Telefone telefone, 
 			@PathVariable("pessoaid") Long pessoaId) {
+		
+		if (!telefone.isValido()) {
+			return paginaTelefone(pessoaId).addObject("msg", telefone.getErrorMessageUser());
+		}
+		
 		Pessoa pessoa = pessoaRepository.findById(pessoaId).get();
 		telefone.setPessoa(pessoa);
 		telefoneRepository.save(telefone);
@@ -115,6 +117,9 @@ public class PessoaController {
 		Pessoa pessoa = pessoaRepository.findById(id).get();
 		modelAndView.addObject("pessoaobj", pessoa);
 		modelAndView.addObject("telefones", telefoneRepository.getTelefones(id));
+		modelAndView.addObject("msg", "");
 		return modelAndView;
 	}
+	
+	
 }
