@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org">
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 	
 <head>
 
@@ -25,8 +26,10 @@
 		<label>Sobrenome</label> 
 		<input type="text" name="sobrenome" th:field="*{sobrenome}"/> 
 		
-		<label>Idade</label> 
-		<input	type="text" name="idade" th:field="*{idade}"/> 
+		<div sec:authorize="hasRole('ROLE_GERENTE')">
+			<label>Idade</label> 
+			<input	type="text" name="idade" th:field="*{idade}"/> 
+		</div>
 		
 		<input type="submit" value="salvar">
 	</form>
