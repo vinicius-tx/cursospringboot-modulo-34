@@ -4,8 +4,9 @@
 	
 <head>
 
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
+	<meta charset="ISO-8859-1">
+	<title>Insert title here</title>
+	
 </head>
 
 <body>	
@@ -26,13 +27,14 @@
 	
 
 	<h5>Telefones</h5>
-	<form th:action="@{/addfonepessoa/{pessoaid}(pessoaid = ${pessoaobj.id})}" method="post">		
+	<form th:action="@{/addfonepessoa/{pessoaid}(pessoaid = ${pessoaobj.id})}"
+		 method="post" id="form">		
 	
 		<label for="numero">Numero</label>
-		<input type="text" name="numero"><br/>
+		<input type="text" name="numero" id="numero"><br/>
 		
 		<label for="tipo">Tipo</label>
-		<input type="text" name="tipo"><br/>
+		<input type="text" name="tipo" id="tipo"><br/>
 		
 		
 		<input type="submit" value="Adicionar">
@@ -53,6 +55,21 @@
 			<td><a th:href="@{/removertelefone/{idtelefone}(idtelefone = ${fone.id})}"><span>Excluir</span></a></td>
 		</tr>
 		
+		
 	</table>
+	
+	<script>
+		document.querySelector('#form').addEventListener('submit',  (event) => {	
+		    const inputNumero = document.querySelector('#numero')
+		    const inputTipo =  document.querySelector('#tipo')
+		    if (!inputNumero.value || !inputTipo.value) {
+		        alert('Digite o numero e o tipo')
+		        event.preventDefault()
+		    }
+		    else {
+		        alert('Enviado com sucesso')
+		    }
+		})
+	</script>
 	
 </html>

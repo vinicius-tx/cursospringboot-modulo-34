@@ -120,6 +120,4 @@ public class PessoaController {
 		modelAndView.addObject("msg", "");
 		return modelAndView;
 	}
-	
-	
 }
