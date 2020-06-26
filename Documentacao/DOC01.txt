@@ -95,3 +95,36 @@ ObjectError object
 
 * 
 	: Asterisco antes do caminho é bom pra quando as urls estiverem bagunçadas.
+
+WebConfigSecurity extends WebSecurityConfigurerAdapter
+	:Adaptar as configurações ao nosso sistema. Urls, usuarios, especificar algum bloqueio.
+	
+@Configuration
+	:Classe de configuração
+
+@EnableWebSecurity
+	:Sabe que essa é uma classe de configuração de segurança
+	:Lê os métodos e implementa em memória.		
+	
+configure(HttpSecurity http) 
+	:Configura as solicitações de acesso por HTTP
+	
+Método csrf().disable()
+	: Desabilita as configurações padrão de memória do spring
+authorizeRequests() 
+	: Restringe os acessos.
+antMatchers(HttpMethod.GET, "/").permitAll() 
+	: Permite inicialmente acesso a todos com as requisições get com essa url '/'.
+	
+anyRequest().authenticated() 
+	: Qualquer requisição tem de ser autenticada
+	
+and().formLogin().permitAll() 
+	: Permite acesso ao formulário de login.
+
+and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout")) 
+	:Mapeia url de logout e invalida usuário autenticado.
+	
+configure(AuthenticationManagerBuilder auth)
+	:Configura autenticação do usuário com o banco de dados ou em memória
+
