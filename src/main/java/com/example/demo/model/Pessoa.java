@@ -3,6 +3,7 @@ package com.example.demo.model;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -33,9 +34,12 @@ public class Pessoa implements Serializable {
 	@Min(value = 18, message = "Idade Invalida")
 	private Integer idade;
 	
+	@Column(columnDefinition = "varchar(1)")
+	private String sexo;
+	
 	@OneToMany(mappedBy = "pessoa")
 	private List<Telefone> telefones = null;
-
+	
 	public Pessoa() {
 		// TODO Auto-generated constructor stub
 	}
@@ -79,4 +83,12 @@ public class Pessoa implements Serializable {
 	public void setTelefones(List<Telefone> telefones) {
 		this.telefones = telefones;
 	}
+
+	public String getSexo() {
+		return sexo;
+	}
+
+	public void setSexo(String sexo) {
+		this.sexo = sexo;
+	}	
 }

@@ -30,8 +30,15 @@
 			<label>Idade</label> 
 			<input	type="text" name="idade" th:field="*{idade}"/> 
 		</div>
+
+		<label for="sexo">Sexo</label> 
 		
-		<input type="submit" value="salvar">
+		<select name="sexo" id="sexo">
+			<option value="" disabled="disabled" selected="selected">[Selecione]</option>
+			<option value="M">Masculino</option>
+			<option value="F">Feminino</option>
+		</select> <input type="submit" value="salvar">
+	
 	</form>
 	
 	
