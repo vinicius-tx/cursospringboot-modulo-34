@@ -10,60 +10,101 @@
 </head>
 
 <body>
-	<h2>Cadastro Pessoa</h2>
-	
 	<div th:each="m : ${msg}" id = "mensagem">
+	
 		<span th:text="${m}"></span>
+	
 	</div>
-
-	<form action="salvarpessoa" th:object="${pessoaobj}" method="post" class="form">
+<fieldset>
+	
+	<legend>Cadastro de Pessoa</legend>
+	
+	<form action="salvarpessoa" th:object="${pessoaobj}" method="post" id="form">
+		
 		<label>ID</label>
+		
 		<input type="text" name="id" th:field="*{id}" readonly="readonly">
 	
 		<label>Nome</label> 
+		
 		<input type="text" name="nome" th:field="*{nome}"/> 
 		
 		<label>Sobrenome</label> 
+		
 		<input type="text" name="sobrenome" th:field="*{sobrenome}"/> 
 		
 		<div sec:authorize="hasRole('ROLE_GERENTE')">
+		
 			<label>Idade</label> 
+		
 			<input	type="text" name="idade" th:field="*{idade}"/> 
+		
 		</div>
 
 		<label for="sexo">Sexo</label> 
 		
 		<select name="sexo" id="sexo" th:field="*{sexo}">
+
 			<option  value="" selected="selected">[Selecione]</option>
+
 			<option value="M">Masculino</option>
+
 			<option value="F">Feminino</option>
-		</select> <input type="submit" value="salvar">
-	
+
+		</select> <input type="submit" value="salvar">	
+
 	</form>
+
+</fieldset>
 	
 	
-	<form action="pesquisapessoa" method="post">
-		<label>Pesquisa por nome</label>
-		<input type="text" name="nomepesquisa">
-		<input type="submit" value="buscar">
-	</form>
+<form action="pesquisapessoa" method="post" id="pesquisa">
 	
+	<label>Pesquisa por nome</label>
+	
+	<input type="text" name="nomepesquisa">
+
+	<label for="sexo">Sexo</label> 
+		
+	<select name="sexo" id="sexo" >
+
+		<option  value="" selected>[Selecione]</option>
+
+		<option value="M">Masculino</option>
+
+		<option value="F">Feminino</option>
+
+	</select> 	
+
+
+	<input type="submit" value="buscar">
+
+</form>
 	
 	<a href="/listapessoas">Listar Pessoas</a>
 	
 	
 	<table>
+
 		<tr th:each="pessoa : ${pessoas}">
+
 			<td th:text=" ${pessoa.id}"/>
+
 			<td><a th:href="@{/telefones/{idpessoa}(idpessoa = ${pessoa.id})}"><span th:text=" ${pessoa.nome}"></span></a><td/>
+
 			<td th:text=" ${pessoa.sobrenome}"/>
+
 			<td><a th:href="@{/editarpessoa/{idpessoa}(idpessoa = ${pessoa.id})}">Editar</a></td>
+
 			<td><a th:href="@{/removerpessoa/{idpessoa}(idpessoa = ${pessoa.id})}">Excluir</a></td>
+
 		</tr>
+
 	</table>
 	
 	<script type="text/javascript">
-		document.querySelector('.form').addEventListener('submit',(event) => {
+
+		document.querySelector('#form').addEventListener('submit',(event) => {
 			const divMensagem = document.querySelector('#mensagem')
 			const inputSexo = document.querySelector('#sexo')
 			if (!inputSexo.value) {
@@ -72,7 +113,6 @@
 			}
 		})
 
-		
 	</script>
 
 </body>

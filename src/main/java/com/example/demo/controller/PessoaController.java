@@ -1,5 +1,4 @@
 package com.example.demo.controller;
-
 import java.util.ArrayList;
 import java.util.List;
 import javax.validation.Valid;
@@ -24,6 +23,7 @@ public class PessoaController {
 
 	private final String telaCadastroPessoa = "cadastro/cadastropessoa";
 	private final String telaTelefone = "cadastro/telefones";
+	private final List<String> mensagemsDeErro = new ArrayList<>();
 	
 	@Autowired
 	private PessoaRepository pessoaRepository;
@@ -71,9 +71,18 @@ public class PessoaController {
 	}
 	
 	@PostMapping("**/pesquisapessoa")
-	public ModelAndView pesquisar(@RequestParam("nomepesquisa") String nomepesquisa) {
-		return paginaCadastroPessoa()
-				.addObject("pessoas", pessoaRepository.findPessoaByName(nomepesquisa));
+	public ModelAndView pesquisar(@RequestParam("nomepesquisa") String nomepesquisa, @RequestParam("sexo") String sexo) {
+		mensagemsDeErro.clear();
+		if (pesquisaValida(nomepesquisa, sexo)) {			
+			return paginaCadastroPessoa().addObject("pessoas", pessoaRepository.findPessoaByNameAndSex(nomepesquisa, sexo));
+		}
+		
+		if(pesquisaNomeValida(nomepesquisa, sexo)) {
+			return paginaCadastroPessoa().addObject("pessoas", pessoaRepository.findPessoaByName(nomepesquisa));
+		}
+		
+		ModelAndView modelAndView = paginaCadastroPessoa().addObject("msg", mensagemsDeErro);
+		return modelAndView;
 	}
 	
 	@GetMapping("**/telefones/{idpessoa}")
@@ -101,6 +110,33 @@ public class PessoaController {
 		Long idPessoa = telefoneRepository.getPessoaId(idTelefone);
 		telefoneRepository.deleteById(idTelefone);
 		return 	paginaTelefone(idPessoa);		
+	}
+	
+	public boolean pesquisaValida(String nome, String sexo) {
+		boolean valido = true;
+		
+		
+		valido = pesquisaNomeValida(nome, sexo);
+		
+		if(sexo == null || sexo.isEmpty()) {
+			mensagemsDeErro.add("Sexo não informado");
+			valido = false;
+		}
+		
+		return valido;
+	}
+	
+	public boolean pesquisaNomeValida(String nome, String sexo) {
+		boolean valido = true;
+		
+		if (nome == null || nome.isEmpty()) {
+			if (mensagemsDeErro.isEmpty()) {				
+				mensagemsDeErro.add("Nome da pesquisa não foi informado");
+			}
+			valido = false;
+		}
+		
+		return valido;
 	}
 	
 	public ModelAndView paginaCadastroPessoa() {
