@@ -12,11 +12,11 @@
 <body>
 	<h2>Cadastro Pessoa</h2>
 	
-	<div th:each="m : ${msg}">
+	<div th:each="m : ${msg}" id = "mensagem">
 		<span th:text="${m}"></span>
 	</div>
 
-	<form action="salvarpessoa" th:object="${pessoaobj}" method="post">
+	<form action="salvarpessoa" th:object="${pessoaobj}" method="post" class="form">
 		<label>ID</label>
 		<input type="text" name="id" th:field="*{id}" readonly="readonly">
 	
@@ -33,8 +33,8 @@
 
 		<label for="sexo">Sexo</label> 
 		
-		<select name="sexo" id="sexo">
-			<option value="" disabled="disabled" selected="selected">[Selecione]</option>
+		<select name="sexo" id="sexo" th:field="*{sexo}">
+			<option  value="" selected="selected">[Selecione]</option>
 			<option value="M">Masculino</option>
 			<option value="F">Feminino</option>
 		</select> <input type="submit" value="salvar">
@@ -61,6 +61,19 @@
 			<td><a th:href="@{/removerpessoa/{idpessoa}(idpessoa = ${pessoa.id})}">Excluir</a></td>
 		</tr>
 	</table>
+	
+	<script type="text/javascript">
+		document.querySelector('.form').addEventListener('submit',(event) => {
+			const divMensagem = document.querySelector('#mensagem')
+			const inputSexo = document.querySelector('#sexo')
+			if (!inputSexo.value) {
+				event.preventDefault()
+				divMensagem.innerHTML = `<h3>Esqueceu de selecionar o seu sexo<h3>`
+			}
+		})
+
+		
+	</script>
 
 </body>
 </html>
