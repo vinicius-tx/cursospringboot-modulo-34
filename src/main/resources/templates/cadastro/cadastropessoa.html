@@ -76,8 +76,8 @@
 
 	</select> 	
 
-
-	<input type="submit" value="buscar">
+	<input type="submit"   value="PDF" onclick="document.querySelector('#pesquisa').method = 'get'">
+	<input type="submit" value="buscar" onclick="document.querySelector('#pesquisa').method = 'post'">
 
 </form>
 	
@@ -104,7 +104,7 @@
 	
 	<script type="text/javascript">
 
-		document.querySelector('#form').addEventListener('submit',(event) => {
+		document.querySelector('#form').addEventListener('submit', (event) => {
 			const divMensagem = document.querySelector('#mensagem')
 			const inputSexo = document.querySelector('#sexo')
 			if (!inputSexo.value) {

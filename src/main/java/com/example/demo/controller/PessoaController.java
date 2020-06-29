@@ -1,6 +1,8 @@
 package com.example.demo.controller;
 import java.util.ArrayList;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -45,12 +47,11 @@ public class PessoaController {
 	public ModelAndView salvar(@Valid Pessoa pessoa, BindingResult binding) {
 		
 		if (binding.hasErrors()) {
-			List<String> msg = new ArrayList<>();
 			for (ObjectError object : binding.getAllErrors()) {
-				msg.add(object.getDefaultMessage());
+				mensagemsDeErro.add(object.getDefaultMessage());
 			}
 			
-			return paginaCadastroPessoa().addObject("msg", msg);
+			return paginaCadastroPessoa();
 		}
 		
 		pessoaRepository.save(pessoa);
@@ -73,16 +74,7 @@ public class PessoaController {
 	@PostMapping("**/pesquisapessoa")
 	public ModelAndView pesquisar(@RequestParam("nomepesquisa") String nomepesquisa, @RequestParam("sexo") String sexo) {
 		mensagemsDeErro.clear();
-		if (pesquisaValida(nomepesquisa, sexo)) {			
-			return paginaCadastroPessoa().addObject("pessoas", pessoaRepository.findPessoaByNameAndSex(nomepesquisa, sexo));
-		}
-		
-		if(pesquisaNomeValida(nomepesquisa, sexo)) {
-			return paginaCadastroPessoa().addObject("pessoas", pessoaRepository.findPessoaByName(nomepesquisa));
-		}
-		
-		ModelAndView modelAndView = paginaCadastroPessoa().addObject("msg", mensagemsDeErro);
-		return modelAndView;
+		return  paginaCadastroPessoa().addObject("pessoas", processaCondicoes(nomepesquisa, sexo));
 	}
 	
 	@GetMapping("**/telefones/{idpessoa}")
@@ -112,39 +104,76 @@ public class PessoaController {
 		return 	paginaTelefone(idPessoa);		
 	}
 	
+	@GetMapping("**/pesquisapessoa")
+	public void imprimePDF(@RequestParam("nomepesquisa") String nomepesquisa, @RequestParam("sexo") 
+	String sexo, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		
+		List<Pessoa> pessoas = processaCondicoes(nomepesquisa, sexo);
+		byte[] pdf = ReportUtil.gerarRelatorio(pessoas, "pessoa", request.getServletContext());
+		response.setContentLength(pdf.length);
+		response.setContentType("application/octet-stream");
+		String headerKey = "Content-Disposition";
+		String headerValue = String.format("attachment; filename=\"%s\"", "relatorio.pdf" );
+		response.setHeader(headerKey, headerValue);
+		response.getOutputStream().write(pdf);
+		
+	}
+	
 	public boolean pesquisaValida(String nome, String sexo) {
 		boolean valido = true;
-		
-		
-		valido = pesquisaNomeValida(nome, sexo);
-		
-		if(sexo == null || sexo.isEmpty()) {
-			mensagemsDeErro.add("Sexo não informado");
-			valido = false;
-		}
-		
+		valido = pesquisaNomeValida(nome);
+		valido = pesquisaSexoValida(sexo);
 		return valido;
 	}
 	
-	public boolean pesquisaNomeValida(String nome, String sexo) {
+	public boolean pesquisaSexoValida(String sexo) {
+		if(sexo == null || sexo.isEmpty()) {
+			String mensagem = "Sexo não informado";
+			if (!mensagemsDeErro.contains(mensagem)) {				
+				mensagemsDeErro.add(mensagem);
+			}
+			return false;
+		}
+		return true;
+	}
+	
+	public boolean pesquisaNomeValida(String nome) {
 		boolean valido = true;
 		
 		if (nome == null || nome.isEmpty()) {
-			if (mensagemsDeErro.isEmpty()) {				
-				mensagemsDeErro.add("Nome da pesquisa não foi informado");
+			String mensagem = "Nome da pesquisa não foi informado";
+			if (!mensagemsDeErro.contains("Nome da pesquisa não foi informado")) {				
+				mensagemsDeErro.add(mensagem);
 			}
 			valido = false;
 		}
-		
 		return valido;
 	}
+	
+	public List<Pessoa> processaCondicoes(String nomepesquisa, String sexo) {
+		if (pesquisaValida(nomepesquisa, sexo)) return pessoaRepository.findPessoaByNameAndSex(nomepesquisa, sexo);
+		
+		if(pesquisaNomeValida(nomepesquisa)) return pessoaRepository.findPessoaByName(nomepesquisa);
+		
+		if (pesquisaSexoValida(sexo)) return pessoaRepository.findPessoaBySex(sexo);
+		
+		List<Pessoa> pessoas = new ArrayList<Pessoa>();
+		Iterable<Pessoa> it = pessoaRepository.findAll();
+		for (Pessoa p : it) {
+			pessoas.add(p);
+		}
+	
+		return pessoas;
+	}
+
+	
 	
 	public ModelAndView paginaCadastroPessoa() {
 		ModelAndView andView =  new ModelAndView(telaCadastroPessoa);
 		Iterable<Pessoa> pessoasIt = pessoaRepository.findAll();		
 		andView.addObject("pessoas", pessoasIt);
 		andView.addObject("pessoaobj", new Pessoa());
-		andView.addObject("msg", "");
+		andView.addObject("msg", mensagemsDeErro);
 		return andView;
 	}
 	

@@ -140,10 +140,57 @@ classe de serviço
 		
 GrantedAuthority
 	:Usar os recursos do spring e facilitar a nossa implementação.
-	:É um padrão onde sempre vai ter que ter ROLE_ALGUMACOISA nessa tabela do banco de dados.		
+	:É um padrão onde sempre vai ter que ter ROLE_ALGUMACOISA nessa tabela do banco de dados.
+	
+ReportUtil
+	:Classe geradora de relatórios pra gente.		
 		
+@Component
+	:Pra classe ser gerenciada pelo spring
 		
-		
+public byte[] gerarRelatorio(List listaDados, String relatorio, ServletContext sContext) 
+	:Retorna nossa pdf em Byte para dowload no navegador	
+	
+JRBeanCollectionDataSource jrbcds = new JRBeanCollectionDataSource(listaDados)
+	:Cria a nossa lista de dados para o relatório com nossa lista de objetos para imprimir.
+	:Raciocinio. De alguma forma, eu tenho que pega essa lista que eu passei e tranforma em uma lista acessivel para o meu arquivo de relatório.
+
+String caminhoJasper = servletContext.getRealPath("relatorios") + File.separator + relatorio + ".jasper";
+	:Carrega o caminho do jasper compilado.
+
+JasperPrint impressoraJasper = JasperFillManager.fillReport(caminhoJasper, new HashMap(), jrbcds);
+	:Finalmente nessa parte, eu crio a impressora jasper com os dados passados. Pra isso preciso passar o caminho, coleção e também uma lista compatível.
+	:Criei minha impressora e depois posso usá-la para imprimir em qualquer tipo de documento.
+
+return JasperExportManager.exportReportToPdf(impressoraJasper);
+	:Exporta para byte para fazer o dowload do pdf.
+	
+10 PASSOS PARA FAZER UM RELATÓRIO JASPER DE QUALIDADE
+	
+Queria explicar o processo de relatórios com o Jasper. Primeiro, nós temos que definir as estruturas de pasta onde ficarão os nossos projetos.
+Nesse exemplo, eu criei src -> main -> webapp -> relatorios -> arquivos jasper (pessoa.jasper, pessoa.jrxml)
+
+2 É necessário baixar a dependência jasper através do Maven do jasper 6.8.0.
+
+3 Temos que instalar o jasper na nosssa maquina 6.8.0
+
+4 Temos que abrir o jasper na nossa máquina
+
+5 com ele aberto, deve-se criar um novo JasperReport project
+
+6 Depois devemos adicionar nosso arquivo jar no build path
+
+7 Devemo criar o nosso arquivo jasper report
+
+8 devemos compilar e colocar os arquivos na estrutura de pastas criadas do projeto
+
+9 devemos criar a classe responsável por converter um pdf
+
+10 Devemos fazer uma classe que dê a resposta, como foi implementado no projeto, para o navegador baixar o pdf.
+ 
+
+	
+			
 		
 		
 		
