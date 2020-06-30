@@ -1,4 +1,5 @@
 package com.example.demo.controller;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.model.Pessoa;
@@ -51,19 +53,32 @@ public class PessoaController {
 		return paginaCadastroPessoa();
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = "**/salvarpessoa")
-	public ModelAndView salvar(@Valid Pessoa pessoa, BindingResult binding) {
+	@RequestMapping(method = RequestMethod.POST, value = "**/salvarpessoa", consumes = {"multipart/form-data"})
+	public ModelAndView salvar(@Valid Pessoa pessoa, BindingResult binding, final MultipartFile file) throws IOException {
 		mensagemsDeErro.clear();
+		erroJpaBindingMessages(binding);
+		if (!mensagemsDeErro.isEmpty()) return paginaCadastroPessoa();
+		pessoaRepository.save(insereCurriculo(pessoa, file));
+		return paginaCadastroPessoa();
+	}
+	
+	public void erroJpaBindingMessages(BindingResult binding) {
 		if (binding.hasErrors()) {
 			for (ObjectError object : binding.getAllErrors()) {
 				mensagemsDeErro.add(object.getDefaultMessage());
-			}
-			
-			return paginaCadastroPessoa();
+			}			
+		}
+	}
+	
+	public Pessoa insereCurriculo(Pessoa pessoa, MultipartFile file) throws IOException {
+		if (pessoa.getId() != null) {
+			Pessoa pessoaBanco = pessoaRepository.findById(pessoa.getId()).get();
+			if (file.getSize() > 0 ) pessoaBanco.setCurriculo(file.getBytes());	
+			return pessoaBanco;
 		}
 		
-		pessoaRepository.save(pessoa);
-		return paginaCadastroPessoa();
+		if (file.getSize() > 0 ) pessoa.setCurriculo(file.getBytes());
+		return pessoa;
 	}
 	
 	@GetMapping("/editarpessoa/{idpessoa}")

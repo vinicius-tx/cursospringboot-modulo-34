@@ -19,7 +19,10 @@
 	
 	<legend>Cadastro de Pessoa</legend>
 	
-	<form action="salvarpessoa" th:object="${pessoaobj}" method="post" id="form">
+	<form action="salvarpessoa" th:object="${pessoaobj}" method="post" id="form" enctype="multipart/form-data">
+		
+		<label>Upload de curriculo</label>
+		<input type="file" name="file" id="file">
 		
 		<label>ID</label>
 		

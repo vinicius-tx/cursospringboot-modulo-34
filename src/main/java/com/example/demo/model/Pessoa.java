@@ -11,6 +11,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
@@ -58,6 +59,9 @@ public class Pessoa implements Serializable {
 	
 	@ManyToOne
 	private Profissao profissao;
+	
+	@Lob
+	private byte[] curriculo;
 	
 	public Pessoa() {
 		// TODO Auto-generated constructor stub
@@ -133,5 +137,13 @@ public class Pessoa implements Serializable {
 
 	public void setDataNascimento(Date dataNascimento) {
 		this.dataNascimento = dataNascimento;
+	}
+
+	public byte[] getCurriculo() {
+		return curriculo;
+	}
+
+	public void setCurriculo(byte[] curriculo) {
+		this.curriculo = curriculo;
 	}
 }
