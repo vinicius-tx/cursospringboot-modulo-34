@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,6 +21,9 @@ import javax.validation.constraints.NotNull;
 public class Pessoa implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+	
+	@Enumerated(EnumType.STRING)
+	private Cargo cargo;
 	
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -102,5 +107,13 @@ public class Pessoa implements Serializable {
 
 	public void setProfissao(Profissao profissao) {
 		this.profissao = profissao;
+	}
+
+	public Cargo getCargo() {
+		return cargo;
+	}
+
+	public void setCargo(Cargo cargo) {
+		this.cargo = cargo;
 	}	
 }

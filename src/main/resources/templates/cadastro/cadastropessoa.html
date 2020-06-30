@@ -48,6 +48,10 @@
 			<option th:each = "p : ${profissoes}" th:value ="${p.id}" th:text="${p.nome}"/>
 		
 		</select>
+		
+		<select name="cargo" id="cargo"  th:field="*{cargo}">
+			<option th:each="c : ${T(com.example.demo.model.Cargo).values()}" th:value="${c}" th:text="${c}"/>
+		</select>
 
 		<label for="sexo">Sexo</label> 
 		
