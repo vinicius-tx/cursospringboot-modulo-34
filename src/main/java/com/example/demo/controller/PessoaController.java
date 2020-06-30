@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -17,9 +18,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
 import com.example.demo.model.Pessoa;
+import com.example.demo.model.Profissao;
 import com.example.demo.model.Telefone;
 import com.example.demo.repository.PessoaRepository;
+import com.example.demo.repository.ProfissaoRepository;
 import com.example.demo.repository.TelefoneRepository;
 
 @Controller
@@ -28,6 +32,9 @@ public class PessoaController {
 	private final String telaCadastroPessoa = "cadastro/cadastropessoa";
 	private final String telaTelefone = "cadastro/telefones";
 	private final List<String> mensagemsDeErro = new ArrayList<>();
+	
+	@Autowired
+	private ProfissaoRepository profissaoRepository;
 	
 	@Autowired
 	private PessoaRepository pessoaRepository;
@@ -47,7 +54,7 @@ public class PessoaController {
 
 	@RequestMapping(method = RequestMethod.POST, value = "**/salvarpessoa")
 	public ModelAndView salvar(@Valid Pessoa pessoa, BindingResult binding) {
-		
+		mensagemsDeErro.clear();
 		if (binding.hasErrors()) {
 			for (ObjectError object : binding.getAllErrors()) {
 				mensagemsDeErro.add(object.getDefaultMessage());
@@ -175,6 +182,7 @@ public class PessoaController {
 		andView.addObject("pessoas", pessoasIt);
 		andView.addObject("pessoaobj", new Pessoa());
 		andView.addObject("msg", mensagemsDeErro);
+		andView.addObject("profissoes", profissaoRepository.findAll());
 		return andView;
 	}
 	

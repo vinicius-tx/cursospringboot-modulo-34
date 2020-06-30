@@ -35,11 +35,19 @@
 		
 		<div sec:authorize="hasRole('ROLE_GERENTE')">
 		
-			<label>Idade</label> 
+			<label for="idade">Idade</label> 
 		
-			<input	type="text" name="idade" th:field="*{idade}"/> 
+			<input	type="text" name="idade" th:field="*{idade}" id="idade"/> 
 		
 		</div>
+		
+		<label for="profissao">Profissao</label> 
+		
+		<select name="profissao" id="profissao" th:field="*{profissao.id}">
+			
+			<option th:each = "p : ${profissoes}" th:value ="${p.id}" th:text="${p.nome}"/>
+		
+		</select>
 
 		<label for="sexo">Sexo</label> 
 		
