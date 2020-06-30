@@ -62,24 +62,6 @@ public class PessoaController {
 		return paginaCadastroPessoa();
 	}
 	
-	public void erroJpaBindingMessages(BindingResult binding) {
-		if (binding.hasErrors()) {
-			for (ObjectError object : binding.getAllErrors()) {
-				mensagemsDeErro.add(object.getDefaultMessage());
-			}			
-		}
-	}
-	
-	public Pessoa insereCurriculo(Pessoa pessoa, MultipartFile file) throws IOException {
-		if (pessoa.getId() != null) {
-			Pessoa pessoaBanco = pessoaRepository.findById(pessoa.getId()).get();
-			if (file.getSize() > 0 ) pessoaBanco.setCurriculo(file.getBytes());	
-			return pessoaBanco;
-		}
-		
-		if (file.getSize() > 0 ) pessoa.setCurriculo(file.getBytes());
-		return pessoa;
-	}
 	
 	@GetMapping("/editarpessoa/{idpessoa}")
 	public ModelAndView editar(@PathVariable("idpessoa") Long idpessoa) {
@@ -141,7 +123,30 @@ public class PessoaController {
 		response.getOutputStream().write(pdf);
 		
 	}
+
+	public void erroJpaBindingMessages(BindingResult binding) {
+		if (binding.hasErrors()) {
+			for (ObjectError object : binding.getAllErrors()) {
+				mensagemsDeErro.add(object.getDefaultMessage());
+			}			
+		}
+	}
 	
+	public Pessoa insereCurriculo(Pessoa pessoa, MultipartFile file) throws IOException {
+		if (pessoa.getId() != null) {
+			pessoa = pessoaRepository.findById(pessoa.getId()).get();
+			if (file.getSize() > 0 ) return atribuirFile(pessoa, file);
+		}
+		return file.getSize() > 0 ? atribuirFile(pessoa, file): pessoa;		
+	}
+	
+	private Pessoa atribuirFile(Pessoa pessoa, MultipartFile file) throws IOException {
+		pessoa.setCurriculo(file.getBytes());	
+		pessoa.setTipoFileCurriculo(file.getContentType());
+		pessoa.setNomeFileCurriculo(file.getOriginalFilename());
+		return pessoa;
+	}
+
 	public boolean pesquisaValida(String nome, String sexo) {
 		boolean valido = true;
 		valido = pesquisaNomeValida(nome);
