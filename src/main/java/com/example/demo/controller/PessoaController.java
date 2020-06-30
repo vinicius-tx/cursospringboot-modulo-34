@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.demo.model.Pessoa;
-import com.example.demo.model.Profissao;
 import com.example.demo.model.Telefone;
 import com.example.demo.repository.PessoaRepository;
 import com.example.demo.repository.ProfissaoRepository;
