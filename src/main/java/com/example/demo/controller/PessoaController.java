@@ -1,6 +1,8 @@
 package com.example.demo.controller;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -71,12 +73,6 @@ public class PessoaController {
 		return paginaCadastroPessoa();
 	}
 	
-	@PostMapping("**/pesquisapessoa")
-	public ModelAndView pesquisar(@RequestParam("nomepesquisa") String nomepesquisa, @RequestParam("sexo") String sexo) {
-		mensagemsDeErro.clear();
-		return  paginaCadastroPessoa().addObject("pessoas", processaCondicoes(nomepesquisa, sexo));
-	}
-	
 	@GetMapping("**/telefones/{idpessoa}")
 	public ModelAndView telefones(@PathVariable("idpessoa") Long idpessoa) {
 		return paginaTelefone(idpessoa);
@@ -104,11 +100,17 @@ public class PessoaController {
 		return 	paginaTelefone(idPessoa);		
 	}
 	
+	@PostMapping("**/pesquisapessoa")
+	public ModelAndView pesquisar(@RequestParam("nomepesquisa") String nomepesquisa, @RequestParam("sexo") String sexo) {
+		mensagemsDeErro.clear();
+		return  paginaCadastroPessoa().addObject("pessoas", processaCondicoes(nomepesquisa, sexo, false));
+	}
+	
 	@GetMapping("**/pesquisapessoa")
 	public void imprimePDF(@RequestParam("nomepesquisa") String nomepesquisa, @RequestParam("sexo") 
 	String sexo, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
-		List<Pessoa> pessoas = processaCondicoes(nomepesquisa, sexo);
+		List<Pessoa> pessoas = processaCondicoes(nomepesquisa, sexo, true);
 		byte[] pdf = ReportUtil.gerarRelatorio(pessoas, "pessoa", request.getServletContext());
 		response.setContentLength(pdf.length);
 		response.setContentType("application/octet-stream");
@@ -150,23 +152,22 @@ public class PessoaController {
 		return valido;
 	}
 	
-	public List<Pessoa> processaCondicoes(String nomepesquisa, String sexo) {
+	public List<Pessoa> processaCondicoes(String nomepesquisa, String sexo, boolean escolhaNulloOuTudo) {
 		if (pesquisaValida(nomepesquisa, sexo)) return pessoaRepository.findPessoaByNameAndSex(nomepesquisa, sexo);
 		
 		if(pesquisaNomeValida(nomepesquisa)) return pessoaRepository.findPessoaByName(nomepesquisa);
 		
 		if (pesquisaSexoValida(sexo)) return pessoaRepository.findPessoaBySex(sexo);
 		
-		List<Pessoa> pessoas = new ArrayList<Pessoa>();
-		Iterable<Pessoa> it = pessoaRepository.findAll();
-		for (Pessoa p : it) {
-			pessoas.add(p);
-		}
-	
-		return pessoas;
+		return processaCondicoes(escolhaNulloOuTudo);
 	}
 
-	
+	public List<Pessoa> processaCondicoes(boolean escolhaNulloOuTudo) {
+		List<Pessoa> pessoas = new ArrayList<Pessoa>();
+		Iterator<Pessoa> it = pessoaRepository.findAll().iterator();
+		it.forEachRemaining(pessoa -> pessoas.add(pessoa));
+		return (escolhaNulloOuTudo == true) ? pessoas : null;
+	}
 	
 	public ModelAndView paginaCadastroPessoa() {
 		ModelAndView andView =  new ModelAndView(telaCadastroPessoa);
