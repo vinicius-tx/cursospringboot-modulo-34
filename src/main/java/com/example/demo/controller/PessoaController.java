@@ -43,6 +43,8 @@ public class PessoaController {
 	@Autowired
 	private TelefoneRepository telefoneRepository;
 	
+	private boolean retornoDowloadPaginaValida = false;
+	
 	@RequestMapping(method = RequestMethod.GET, value = "/cadastropessoa")
 	public ModelAndView inicio() {
 		return paginaCadastroPessoa();
@@ -62,6 +64,15 @@ public class PessoaController {
 		return paginaCadastroPessoa();
 	}
 	
+	
+	@GetMapping("**/baixarCurriculo/{idpessoa}")
+	public ModelAndView baixarCurriculo(@PathVariable("idpessoa") Long id, HttpServletResponse response) throws IOException {
+		mensagemsDeErro.clear();
+		Pessoa pessoa = pessoaRepository.findById(id).get();
+		response = processarDowloadComoResposta(pessoa.getCurriculo(), response, 
+				pessoa.getTipoFileCurriculo(), pessoa.getNomeFileCurriculo());
+		return retornoDowloadPaginaValida ? paginaCadastroPessoa(): null; 
+	}
 	
 	@GetMapping("/editarpessoa/{idpessoa}")
 	public ModelAndView editar(@PathVariable("idpessoa") Long idpessoa) {
@@ -115,13 +126,25 @@ public class PessoaController {
 		
 		List<Pessoa> pessoas = processaCondicoes(nomepesquisa, sexo, true);
 		byte[] pdf = ReportUtil.gerarRelatorio(pessoas, "pessoa", request.getServletContext());
-		response.setContentLength(pdf.length);
-		response.setContentType("application/octet-stream");
-		String headerKey = "Content-Disposition";
-		String headerValue = String.format("attachment; filename=\"%s\"", "relatorio.pdf" );
-		response.setHeader(headerKey, headerValue);
-		response.getOutputStream().write(pdf);
+		response = processarDowloadComoResposta(pdf, response, "application/octet-stream", "relatorio");
+	
+	}
+	
+	private HttpServletResponse processarDowloadComoResposta(byte[] arquivo, HttpServletResponse response, String tipoDeConteudo, String nome) throws IOException {
+		if(arquivo == null)  {
+			mensagemsDeErro.add("Sem documento para baixar :( ");
+			retornoDowloadPaginaValida = true;
+			return response;
+		}
 		
+		retornoDowloadPaginaValida = false;
+		response.setContentLength(arquivo.length);
+		response.setContentType(tipoDeConteudo);
+		String headerKey = "Content-Disposition";
+		String headerValue = String.format("attachment; filename=\"%s\"", nome);
+		response.setHeader(headerKey, headerValue);
+		response.getOutputStream().write(arquivo);
+		return response;
 	}
 
 	public void erroJpaBindingMessages(BindingResult binding) {

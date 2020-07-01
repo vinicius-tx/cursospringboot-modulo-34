@@ -112,6 +112,8 @@
 
 			<td th:text=" ${pessoa.sobrenome}"/>
 
+			<td><a th:href="@{/baixarCurriculo/{idpessoa}(idpessoa = ${pessoa.id})}">Dowload</a></td>
+		
 			<td><a th:href="@{/editarpessoa/{idpessoa}(idpessoa = ${pessoa.id})}">Editar</a></td>
 
 			<td><a th:href="@{/removerpessoa/{idpessoa}(idpessoa = ${pessoa.id})}">Excluir</a></td>

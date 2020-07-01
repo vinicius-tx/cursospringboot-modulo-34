@@ -188,7 +188,13 @@ Nesse exemplo, eu criei src -> main -> webapp -> relatorios -> arquivos jasper (
 
 10 Devemos fazer uma classe que dê a resposta, como foi implementado no projeto, para o navegador baixar o pdf.
  
+Como fazer um dowload de um arquivo
 
+	:Métodos de dowload não redirecionam páginas, só as respostas configuradas para dowload. 
+	:Por isso nosso método é void.
+	:O método, quando for especificar uma resposta, não pode retornar uma tela.
+	:resposta tem que ter um tamanho, tipo e cabeçalho. 
+	:Tudo está bem definido no código.
 	
 			
 		
