@@ -1,4 +1,5 @@
 package com.example.demo.controller;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -9,6 +10,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -218,10 +223,16 @@ public class PessoaController {
 		return (escolhaNulloOuTudo == true) ? pessoas : null;
 	}
 	
+	@GetMapping("/pessoaspag")
+	public ModelAndView carregaPessoasPorPaginacao(@PageableDefault(size = 5) Pageable pageable) {
+		System.out.println(pageable.getPageSize());
+		System.out.println(pageable.getPageNumber());
+		return paginaCadastroPessoa().addObject("pessoas", pessoaRepository.findAll(pageable));
+	}
+	
 	public ModelAndView paginaCadastroPessoa() {
 		ModelAndView andView =  new ModelAndView(telaCadastroPessoa);
-		Iterable<Pessoa> pessoasIt = pessoaRepository.findAll();		
-		andView.addObject("pessoas", pessoasIt);
+		andView.addObject("pessoas", pessoaRepository.findAll(PageRequest.of(0, 5, Sort.by("nome"))));
 		andView.addObject("pessoaobj", new Pessoa());
 		andView.addObject("msg", mensagemsDeErro);
 		andView.addObject("profissoes", profissaoRepository.findAll());

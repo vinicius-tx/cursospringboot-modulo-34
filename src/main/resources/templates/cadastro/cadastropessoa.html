@@ -104,8 +104,8 @@
 	
 	<table>
 
-		<tr th:each="pessoa : ${pessoas}">
-
+		<tr th:each="pessoa : ${pessoas.content}">
+	
 			<td th:text=" ${pessoa.id}"/>
 
 			<td><a th:href="@{/telefones/{idpessoa}(idpessoa = ${pessoa.id})}"><span th:text=" ${pessoa.nome}"></span></a><td/>
@@ -122,6 +122,19 @@
 
 	</table>
 	
+	<span th:if="${pessoas.hasPrevious()}">
+		<a th:href = "@{/pessoaspag(page = ${pessoas.number} - 1, size=${pessoas.size})}">Anterior</a>
+	</span>
+		
+	<th:block th:each="i : ${#numbers.sequence(0, pessoas.totalPages - 1)}">
+		<a th:href="@{/pessoaspag(page = ${i}, size=${pessoas.size})}"> [[${i + 1}]] </a>
+	</th:block>
+	
+	<span th:if="${pessoas.hasNext()}">
+		<a th:href = "@{/pessoaspag(page = ${pessoas.number} + 1, size=${pessoas.size})}">Proximo</a>
+	</span>
+	
+		
 	<script type="text/javascript">
 
 		document.querySelector('#form').addEventListener('submit', (event) => {

@@ -195,7 +195,6 @@ Como fazer um dowload de um arquivo
 	:O método, quando for especificar uma resposta, não pode retornar uma tela.
 	:resposta tem que ter um tamanho, tipo e cabeçalho. 
 	:Tudo está bem definido no código.
-	
 			
 		
 		
