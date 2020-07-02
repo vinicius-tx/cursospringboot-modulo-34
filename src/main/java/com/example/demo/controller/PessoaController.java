@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -120,19 +121,27 @@ public class PessoaController {
 	}
 	
 	@PostMapping("**/pesquisapessoa")
-	public ModelAndView pesquisar(@RequestParam("nomepesquisa") String nomepesquisa, @RequestParam("sexo") String sexo) {
+	public ModelAndView pesquisar(@RequestParam("nomepesquisa") String nomepesquisa, 
+			@RequestParam("sexo") String sexo, @PageableDefault(size = 5, sort = {"nome"}) Pageable pageable) {
 		mensagemsDeErro.clear();
-		return  paginaCadastroPessoa().addObject("pessoas", processaCondicoes(nomepesquisa, sexo, false));
+		return  paginaCadastroPessoa()
+					.addObject("pessoas", processaCondicoes(nomepesquisa, sexo, false, pageable))
+					.addObject("nomepesquisa", nomepesquisa);
 	}
 	
 	@GetMapping("**/pesquisapessoa")
 	public void imprimePDF(@RequestParam("nomepesquisa") String nomepesquisa, @RequestParam("sexo") 
 	String sexo, HttpServletRequest request, HttpServletResponse response) throws Exception {
-		
 		List<Pessoa> pessoas = processaCondicoes(nomepesquisa, sexo, true);
 		byte[] pdf = ReportUtil.gerarRelatorio(pessoas, "pessoa", request.getServletContext());
-		response = processarDowloadComoResposta(pdf, response, "application/octet-stream", "relatorio");
+		response = processarDowloadComoResposta(pdf, response, "application/octet-stream", "relatorio.pdf");	
+	}
 	
+	@GetMapping("/pessoaspag")
+	public ModelAndView carregaPessoasPorPaginacao(@PageableDefault(size = 5) Pageable pageable, 
+			@RequestParam("nomepesquisa") String nomepesquisa) {		
+		return paginaCadastroPessoa().addObject("pessoas", processaCondicoes(nomepesquisa, null, false, pageable))
+				.addObject("nomepesquisa", nomepesquisa);
 	}
 	
 	private HttpServletResponse processarDowloadComoResposta(byte[] arquivo, HttpServletResponse response, String tipoDeConteudo, String nome) throws IOException {
@@ -206,7 +215,7 @@ public class PessoaController {
 		return valido;
 	}
 	
-	public List<Pessoa> processaCondicoes(String nomepesquisa, String sexo, boolean escolhaNulloOuTudo) {
+	private List<Pessoa> processaCondicoes(String nomepesquisa, String sexo, boolean escolhaNulloOuTudo) {
 		if (pesquisaValida(nomepesquisa, sexo)) return pessoaRepository.findPessoaByNameAndSex(nomepesquisa, sexo);
 		
 		if(pesquisaNomeValida(nomepesquisa)) return pessoaRepository.findPessoaByName(nomepesquisa);
@@ -215,19 +224,18 @@ public class PessoaController {
 		
 		return processaCondicoes(escolhaNulloOuTudo);
 	}
+	
+	private Page<Pessoa> processaCondicoes(String nomepesquisa, String sexo, boolean escolhaNulloOuTudo, Pageable pageable) {
+		pesquisaNomeValida(nomepesquisa);
+		Page<Pessoa> pessoaPage = pessoaRepository.findPessoaByNamePage(nomepesquisa, pageable);
+		return pessoaPage;
+	}
 
-	public List<Pessoa> processaCondicoes(boolean escolhaNulloOuTudo) {
+	private List<Pessoa> processaCondicoes(boolean escolhaNulloOuTudo) {
 		List<Pessoa> pessoas = new ArrayList<Pessoa>();
 		Iterator<Pessoa> it = pessoaRepository.findAll().iterator();
 		it.forEachRemaining(pessoa -> pessoas.add(pessoa));
 		return (escolhaNulloOuTudo == true) ? pessoas : null;
-	}
-	
-	@GetMapping("/pessoaspag")
-	public ModelAndView carregaPessoasPorPaginacao(@PageableDefault(size = 5) Pageable pageable) {
-		System.out.println(pageable.getPageSize());
-		System.out.println(pageable.getPageNumber());
-		return paginaCadastroPessoa().addObject("pessoas", pessoaRepository.findAll(pageable));
 	}
 	
 	public ModelAndView paginaCadastroPessoa() {
@@ -236,6 +244,7 @@ public class PessoaController {
 		andView.addObject("pessoaobj", new Pessoa());
 		andView.addObject("msg", mensagemsDeErro);
 		andView.addObject("profissoes", profissaoRepository.findAll());
+		andView.addObject("nomepesquisa", "");
 		return andView;
 	}
 	

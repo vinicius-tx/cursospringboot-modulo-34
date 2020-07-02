@@ -80,7 +80,7 @@
 	
 	<label>Pesquisa por nome</label>
 	
-	<input type="text" name="nomepesquisa">
+	<input type="text" name="nomepesquisa" th:value="${nomepesquisa}">
 
 	<label for="sexo">Sexo</label> 
 		
@@ -94,7 +94,7 @@
 
 	</select> 	
 
-	<input type="submit"   value="PDF" onclick="document.querySelector('#pesquisa').method = 'get'">
+	<input type="submit" value="PDF" onclick="document.querySelector('#pesquisa').method = 'get'">
 	<input type="submit" value="buscar" onclick="document.querySelector('#pesquisa').method = 'post'">
 
 </form>
@@ -104,7 +104,7 @@
 	
 	<table>
 
-		<tr th:each="pessoa : ${pessoas.content}">
+		<tr th:each="pessoa : ${pessoas}">
 	
 			<td th:text=" ${pessoa.id}"/>
 
@@ -123,15 +123,15 @@
 	</table>
 	
 	<span th:if="${pessoas.hasPrevious()}">
-		<a th:href = "@{/pessoaspag(page = ${pessoas.number} - 1, size=${pessoas.size})}">Anterior</a>
+		<a th:href = "@{/pessoaspag(page = ${pessoas.number} - 1, size=${pessoas.size}, nomepesquisa = ${nomepesquisa})}">Anterior</a>
 	</span>
 		
 	<th:block th:each="i : ${#numbers.sequence(0, pessoas.totalPages - 1)}">
-		<a th:href="@{/pessoaspag(page = ${i}, size=${pessoas.size})}"> [[${i + 1}]] </a>
+		<a th:href="@{/pessoaspag(page = ${i}, size=${pessoas.size}, nomepesquisa = ${nomepesquisa})}"><span th:if="${!pessoas.isEmpty()}"> [[${i + 1}]] </span></a>
 	</th:block>
 	
 	<span th:if="${pessoas.hasNext()}">
-		<a th:href = "@{/pessoaspag(page = ${pessoas.number} + 1, size=${pessoas.size})}">Proximo</a>
+		<a th:href = "@{/pessoaspag(page = ${pessoas.number} + 1, size=${pessoas.size}, nomepesquisa = ${nomepesquisa})}">Proximo</a>
 	</span>
 	
 		
